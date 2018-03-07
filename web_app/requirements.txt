@@ -1,0 +1,4 @@
+Flask==0.12.2
+Flask_SocketIO==2.9.4
+greenlet==0.4.13
+picamera==1.13

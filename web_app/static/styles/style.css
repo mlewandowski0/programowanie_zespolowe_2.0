@@ -36,7 +36,7 @@ header
 #navigation-panel
 {
   display: inline-block;
-  width: 30%;
+  width: 60%;
 }
 
 #panel-root
@@ -66,4 +66,16 @@ h1
   padding: 15px;
   text-align: center;
   vertical-align: middle;
+}
+
+.collapsStyle
+{
+  background: yellow;
+  color: green;
+}
+
+.body-wrapper
+{
+  color: green;
+  background: green;
 }

@@ -2,6 +2,7 @@
 from importlib import import_module
 import os
 from flask import Flask, render_template, Response
+from flask_socketio import SocketIO
 
 couldStream = True
 
@@ -12,8 +13,10 @@ except ImportError:
     print("didn't find module picamera so streaming from raspberry isn't available !")
     couldStream = False
 
+
 # create flask app
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'l1v3-f0r-l0lz'
 
 ################################################################################
 # CONSTANTS

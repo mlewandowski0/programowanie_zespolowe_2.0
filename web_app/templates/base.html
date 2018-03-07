@@ -32,7 +32,7 @@
     <div id='content'>
       <div id='navigation-panel' class='block'>
       <ui-collapsible title='Visuals'>
-       {% block Visuals  %} {% endblock %}
+       {% block Visuals  %}{% endblock %}
       </ui-collapsible>
       <ui-collapsible title='Audio'>
        {% block Audio %} {% endblock %}
@@ -43,6 +43,10 @@
       <ui-collapsible title='Options'>
        {% block Options %} {% endblock %}
       </ui-collapsible>
+      <ui-collapsible title='Stats'>
+      {% block stats %} {% endblock %}
+      </ui-collapsible>
+     
      </div>
      {% if streamState %}
         <img id='imgStream' src="{{ url_for('video_feed') }}"> 
