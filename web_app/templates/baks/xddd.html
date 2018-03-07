@@ -1,0 +1,61 @@
+{% extends "template.html" %}
+
+<!-- base of app [ animated canvas with some extra ] -->
+{% block content %}
+<div id="canvas-wrap">
+    <canvas id="background">
+
+        Your Current Browser does not Support canvas element !
+
+    </canvas>
+    <div id="panel-root" class="container">
+        <h1>
+            [$ title $]
+        </h1>
+
+        <!-- accordion in which we can push some nice looking buttons and manipulate some sliders or sth. like that -->
+        <div id="content">
+            <div id="navigation-panel" class="block">
+                <ui-collapsible title="Visuals">
+                    {% block visualBlock %} {% endblock %}
+                </ui-collapsible>
+
+                <ui-collapsible title="Audio">
+                    {% block audioBlock %} {% endblock %}
+                </ui-collapsible>
+
+                <ui-collapsible title="Features">
+                    {% block featuresBlock %} {% endblock %}
+                </ui-collapsible>
+
+                <ui-collapsible title="Options">
+                    {% block musicBlock %} {% endblock %}
+                </ui-collapsible>
+            </div>
+            <!--  canvas on which we will be displaying current frame of raspberry pi -->
+            <canvas id="stream-canvas" class="block">
+
+                Your Current Browser does not Support canvas element !
+
+            </canvas>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+<!--- dependencies that are used in application -->
+{% block dependencies %}
+<script src="{{url_for('static', filename='dependencies/vue.js')}}"></script>
+<script src="{{url_for('static', filename='dependencies/keen-ui.js')}}"></script>
+{% endblock %} {% block scripts %}
+<!-- scripts that are responsible for all logic -->
+<script src="{{url_for('static', filename='scripts/background.js')}}"></script>
+<script src="{{url_for('static', filename='scripts/logic.js')}}"></script>
+<script src="{{url_for('static', filename='scripts/main.js')}}"></script>
+{% endblock %}
+
+<!-- global css -->
+{% block styles %}
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles/style.css') }}">
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='dependencies/keen-ui.css') }}"> {% endblock %}

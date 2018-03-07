@@ -1,0 +1,5 @@
+/opt/vc/bin/vcgencmd measure_temp
+du -hs	
+df
+free
+w

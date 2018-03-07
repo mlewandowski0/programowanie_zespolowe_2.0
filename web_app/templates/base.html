@@ -1,0 +1,55 @@
+{% extends 'template.html' %} 
+
+
+{% block styles %}
+  <link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='styles/style.css') }}">
+  <link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='dependencies/keen-ui.min.css') }}"> 
+  
+{% endblock %} 
+
+{% block dependencies %}
+  <script src='{{ url_for("static", filename="dependencies/vue.js") }}'></script>
+  <script src='{{ url_for("static", filename="dependencies/keen-ui.min.js") }}'></script>
+{% endblock %} 
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='scripts/background.js') }}"></script>
+  <script src="{{ url_for('static', filename='scripts/logic.js') }}"></script>
+  <script src="{{ url_for('static', filename='scripts/main.js') }}"></script>
+{% endblock %} 
+
+{% block content %} 
+<div id='canvas-wrap'>
+  <canvas id='background'>
+    Your Current Browser doesn't support canvas element !
+  </canvas>
+
+  <div id='panel-root' class='container'>
+    <h1>
+      [$ title $]
+    </h1>
+    
+    <div id='content'>
+      <div id='navigation-panel' class='block'>
+      <ui-collapsible title='Visuals'>
+       {% block Visuals  %} {% endblock %}
+      </ui-collapsible>
+      <ui-collapsible title='Audio'>
+       {% block Audio %} {% endblock %}
+      </ui-collapsible>
+      <ui-collapsible title='Features'>
+       {% block Features %} {% endblock %}
+      </ui-collapsible>
+      <ui-collapsible title='Options'>
+       {% block Options %} {% endblock %}
+      </ui-collapsible>
+     </div>
+     {% if streamState %}
+        <img id='imgStream' src="{{ url_for('video_feed') }}"> 
+     {% else %}
+        <img src="{{ url_for('static', filename='images/code_monkey.jpg') }} "> 
+     {% endif %} 
+     </div>
+   </div>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <title>Video Streaming Demonstration</title>
+	
+	<link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='styles/style.css') }}">
+	
+	
+	
+	</head>
+  <body>
+    <h1>Video Streaming Demonstration</h1>
+    <!-- <img src="{{ url_for('video_feed') }}"> -->
+		<canvas id='stream' width=600 height=400>
+			Your browser does not support html5 canvas !
+		</canvas>
+		
+		<script>
+				
+			var canv = document.getElementById('stream');
+			var ctx  = canv.getContext('2d');
+
+			function drawImg()
+			{
+				var img = new Image();
+				img.onLoad = function() 
+				{
+					ctx.drawImage(img, 0,0);
+				}				
+				console.log( "{{ url_for('video_feed') }}" );
+				img.src = "{{ url_for('video_feed') }}";
+
+			}	
+			
+			setInterval(drawImg, 50 );
+			
+
+		</script>
+	</body>
+</html>
