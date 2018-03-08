@@ -1,3 +1,5 @@
 https://www.thingiverse.com/thing:36780
 https://pinshape.com/items/36820-3d-printed-pan-and-tilt-servo-sg90-hfgj-trc-mx
-
+https://www.stlfinder.com/3dmodels/gimbal-servo/?page=10&params=VGhpbmdpdmVyc2UgWW91bWFnaW5lIE15bWluaWZhY3RvcnkgQ3VsdHMzZCBQaW5zaGFwZSBUdXJib3NxdWlkIFNoYXBld2F5cyBHcmFiY2FkIENndHJhZGVyIFRocmVlZGluZyBUZjNkbSBSZXBhYmxlcyBDZ3N0dWRpbyBfM2R3YXJlaG91c2UgVHJlYXRzdG9jayBMdXh4bGFicyBfM2RzaG9vayBfM2RjYWRicm93c2VyIF8zZHNxdWlycmVsIEdhbWJvZHk=
+https://www.stlfinder.com/?search=servo
+https://grabcad.com/library?page=1&time=this_month&sort=popular&categories=3d-printing
