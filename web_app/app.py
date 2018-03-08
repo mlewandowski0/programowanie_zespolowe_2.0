@@ -25,13 +25,21 @@ DEF_EFFECT     = "none"
 DEF_FRAMERATE  = 15 
 
 ################################################################################
+# ROUTING
 @app.route('/')
 def robot_controls():
     """Video streaming home page."""
     return render_template('robot_controls.html',streamState=couldStream)
     
 
+@app.route('/video_feed')
+def video_feed():
+        if couldStream:
+            """Video streaming route. Put this in the src attribute of an img tag."""
+            return Response(genStream(Camera()),
+                        mimetype='multipart/x-mixed-replace; boundary=frame')
 ################################################################################    
+# STREAMING
 def genStream(camera):
     """Video streaming generator function."""
     while True:
@@ -39,16 +47,14 @@ def genStream(camera):
         controller.process(frame)
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-
 ################################################################################    
-@app.route('/video_feed')
-def video_feed():
-        if couldStream:
-            """Video streaming route. Put this in the src attribute of an img tag."""
-            return Response(genStream(Camera()),
-                        mimetype='multipart/x-mixed-replace; boundary=frame')
+# WEB SOCKET LOGIC
+@socketio.on('messa'
+
+
     
 ################################################################################    
+# CONTROLLER CLASS
 class controller():
     @staticmethod
     def configurate():
@@ -66,6 +72,8 @@ class controller():
     @staticmethod
     def start():
         app.run(host='0.0.0.0', threaded=True)
+
+################################################################################    
 
 if __name__ == '__main__':
     controller.configurate()

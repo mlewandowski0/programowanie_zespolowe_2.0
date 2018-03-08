@@ -79,3 +79,21 @@ h1
   color: green;
   background: green;
 }
+
+#content
+{
+  width: 1200px;
+  float: left;
+}
+
+#navigation-panel
+{
+  width: 20%;
+  float: left;
+}
+
+#stream-content
+{
+  float: left;
+  left: 50px;
+}

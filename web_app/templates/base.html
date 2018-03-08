@@ -10,6 +10,7 @@
 {% block dependencies %}
   <script src='{{ url_for("static", filename="dependencies/vue.js") }}'></script>
   <script src='{{ url_for("static", filename="dependencies/keen-ui.min.js") }}'></script>
+  <script src='{{ url_for("static", filename="dependencies/socket.io.js") }}'></script>
 {% endblock %} 
 
 {% block scripts %}
@@ -48,11 +49,13 @@
       </ui-collapsible>
      
      </div>
+     <div id='stream-content'>
      {% if streamState %}
         <img id='imgStream' src="{{ url_for('video_feed') }}"> 
      {% else %}
         <img src="{{ url_for('static', filename='images/code_monkey.jpg') }} "> 
-     {% endif %} 
+     {% endif %}
+     </div>
      </div>
    </div>
 </div>

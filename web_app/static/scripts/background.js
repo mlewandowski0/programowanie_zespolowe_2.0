@@ -5,6 +5,15 @@ var ctx		 = canvas.getContext('2d');
 function initBackground()
 {
 		createBackground();
+
+    // draw some simple animations, cuz why not
+    setInterval( function()
+    {
+       ctx.fillStyle = '#FF0000';
+       ctx.fillRect(1000,200,100,100);
+       console.log('xdd');
+
+    }, 100);
 }
 
 function createBackground()
