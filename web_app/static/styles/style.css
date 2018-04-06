@@ -1,99 +1,153 @@
-img 
-{
-	outline: 4px dotted purple;
-
+@font-face {
+    font-family: titleFont;
+    src: url("Quantum.otf");
 }
 
-body
-{
-
-  background-color: #330065;
-  margin: 0;
-  min-height: 100%;
-  min-width: 100%;
+@font-face {
+    font-family: textFont;
+    src: url("Robotica.ttf");
 }
 
-header
-{
-  width: 100%;
+img {
+    width: 1000px;
+    outline: 4px dotted purple;
 }
 
-#background 
-{
-  width:  100%;
-  height: 100%;
-  position: absolute;
-  left: 0;
-  top:  0;
-  z-index: -1;
+body {
+    margin: 0;
+    min-height: 100%;
+    min-width: 100%;
 }
 
-#content
-{
-  background: #330065;
+header {
+    width: 100%;
 }
 
-#navigation-panel
-{
-  display: inline-block;
-  width: 60%;
+#background {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    outline: 4px red dotted;
 }
 
-#panel-root
-{
-   position: absolute;
-   z-index: 0;
-   left: 12px;
-   top: 10px;
+#navigation-panel {
+    display: inline-block;
+    width: 80%;
 }
 
-h1 
-{
-  color: white;
+#panel-root {
+    position: absolute;
+    z-index: 0;
+    left: 12px;
+    top: 10px;
 }
 
-#stream-canvas
-{
-  width: 800px;
-  z-index: 2;
-  outline: 4px dotted line;
+#stream-canvas {
+    width: 800px;
+    z-index: 2;
+    outline: 4px dotted line;
 }
 
-.block
-{
-  display: inline-block;
-  margin: 10px 10px 0 0;
-  padding: 15px;
-  text-align: center;
-  vertical-align: middle;
+.block {
+    display: inline-block;
+    margin: 10px 10px 0 0;
+    padding: 15px;
+    text-align: center;
+    vertical-align: middle;
 }
 
-.collapsStyle
-{
-  background: yellow;
-  color: green;
+#content {
+    width: 1500px;
+    float: left;
+    margin-left: -16px;
 }
 
-.body-wrapper
-{
-  color: green;
-  background: green;
+#navigation-panel {
+    width: 25%;
+    float: left;
 }
 
-#content
-{
-  width: 1200px;
-  float: left;
+#stream-content {
+    float: left;
+    left: 50px;
 }
 
-#navigation-panel
-{
-  width: 20%;
-  float: left;
+.optionText {
+    font-family: textFont;
 }
 
-#stream-content
+h1 {
+    color: #eac67a;
+    text-shadow: 0 0 4px #984b43, 0 0 16px #984b43, 0 0 36px #984b43, 0 0 64px #984b43, 0 0 100px #984b43;
+    font-family: titleFont;
+    font-size: 122px;
+    text-align: right;
+}
+
+.ui-collapsible__header {
+    font-size: 32px;
+    text-shadow: 0 0 4px #984b43, 0 0 16px #984b43, 0 0 36px #984b43, 0 0 64px #984b43, 0 0 100px #984b43;
+    color: #eac67a;
+    background-color: #233237;
+    font-weight: bold;
+}
+
+.collapsStyle {
+    align-items: center;
+    font-weight: bold;
+}
+
+.ui-collapsible {
+    background-color: #233237;
+    outline-color: #eac67a;
+}
+
+.robotTab 
 {
-  float: left;
-  left: 50px;
+    position: absolute;
+    float: left;
+    top: 64px;
+    left: 1500px;
+}
+
+.collapsStyle * {
+    margin-bottom: 10px;
+}
+
+button
+{
+    width: 86%;
+}
+
+.ui-button--type-primary.ui-button--color-default
+{
+    background: #3f3f3f;
+    color: #eac67a;
+    text-shadow: 0 0 4px #984b43, 0 0 16px #984b43, 0 0 36px #984b43, 0 0 64px #984b43, 0 0 100px #984b43;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.minimap
+{
+    position: absolute;
+    outline: greenyellow 4px dotted;
+    
+}
+
+#data
+{
+    position: relative;
+}
+
+.ui-collapsible__header-icon
+{
+    color: #eac67a;
+}
+.ui-collapsible__body
+{
+    border: 1px solid #eac67a;
 }

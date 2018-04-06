@@ -7,21 +7,24 @@ function initBackground()
 		createBackground();
 
     // draw some simple animations, cuz why not
-    setInterval( function()
-    {
-       ctx.fillStyle = '#FF0000';
-       ctx.fillRect(1000,200,100,100);
-       console.log('xdd');
 
-    }, 100);
 }
+
+function animation()
+{
+	console.log('xddd');
+
+	ctx.fillStyle = '#ff0000';
+	ctx.arc(600,500,100,0,2 * Math.PI);
+}
+
 
 function createBackground()
 {
-	var my_gradient = ctx.createLinearGradient(0,0,0,170);
-	my_gradient.addColorStop(0, '#9c38d0');
-	my_gradient.addColorStop(1, '#330065');
-	document.querySelector('body').style.backgroundColor = '#330065';
+	var my_gradient = ctx.createRadialGradient(75,50,5,90,60,100);
+	my_gradient.addColorStop(0, '#233237');
+	my_gradient.addColorStop(1, '#18121E');
+	document.querySelector('body').style.backgroundColor = '#18121E';
 
 	ctx.fillStyle = my_gradient;
 	ctx.fillRect(0,0,canvas.width, canvas.height);
@@ -30,3 +33,5 @@ function createBackground()
 // first call that will initialize background
 initBackground();
 
+
+setInterval(animation, 100);

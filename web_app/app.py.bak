@@ -5,7 +5,7 @@ import time
 import random
 import argparse
 import subprocess
-import psutil
+import os
 
 from importlib import import_module
 from flask import Flask, render_template, Response
@@ -38,6 +38,27 @@ isServingFiles = True
 verboseMode    = False
 args           = None
 featuresStates = {"flashlight": False, "laser":False, "buzzing":False}
+systemType     = None
+
+
+################################################################################
+#   Bunch of usefull commands
+def whichSystem():
+    name = sys.platform
+
+    # check if is it linux
+    if name == 'linux':
+        # check if using rPi
+        if os.uname()[1] == "raspberrypi":
+            return "raspberry"
+        else:
+            return "linux"
+    # check if is it windows         
+    elif name == 'win32':
+        return "windows"
+    else:
+        return "dunno"
+
 
 ################################################################################
 # IMAGE PROCESSING ON SERVER SIDE
@@ -127,21 +148,17 @@ def handleReturningRequest():
         quit()
 
 def getTemperature():
-    info = psutil.sensors_temperatures()['coretemp']
-    ret = 0
-    for cpuinfo in info:
-        ret =  max(ret,cpuinfo.current)
-    return ret  
+    return "343"
 
 def getCpuUsage():
-    return psutil.cpu_percent()  
+    subprocess.Popen(["top","-nb1",">","tmp.txt"])
 
 def collectSensorData():
     return 'sensor data'
 
-###############################################
-# functions that respond to user button input #
-#                                             #
+##############################################
+# functions that resond to user button input #
+#                                            #
 @socketio.on("laser")
 def switchLaser():
     if verboseMode:
@@ -174,7 +191,7 @@ def buzz():
 class controller():
     @staticmethod
     def configurate():
-        global args, verboseMode
+        global args, verboseMode, systemName
         # get user input
         parser = argparse.ArgumentParser(description="Python program that runs flask server that controls raspi-bot")
         parser.add_argument("--verbose", help="verbose output")
@@ -182,6 +199,10 @@ class controller():
 
         if args.verbose is not None:
             verboseMode = True
+        
+        systemName = whichSystem()
+        if verboseMode:
+            print(GREEN_ESCAPE + "detected system " + systemName + ESCAPE_END)
 
         # if streaming is available then config camera
         if couldStream:
