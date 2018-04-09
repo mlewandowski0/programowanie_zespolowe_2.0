@@ -1,5 +1,8 @@
-# programowanie_zespolowe_2.0
-Project created for UMK's project called 'programowanie zespołowe' that encourage High School student to work on project managed by University. 
+# Raspi-Bot
+Project created for UMK's project called 'programowanie zespołowe' that encourage High School student to work on project managed by University. Our Goal was to create robot, which can be steered from web app and collect live stream video and data from sensors ( such as CO level etc.)
+
+Projekt został stworzony na projekt UMK "programowanie zespołowe 2.0" którego celem było kilkumiesięczna praca nad projektem wybranym przez uczniów.
+Naszym celem było stworzenie robota, który może być sterowany za pomocą aplikacji webowej, który ma widok z kamery na żywo oraz dostarcza informacji z zamonotowanych czujników ( poziom CO itd.)
 
 ***
 ## Installation 
@@ -17,6 +20,7 @@ python app.py --help  # show usage and flags
 ```
 6. In your favourite webbrowser go to url *localhost:5000*
 
+***
 ## Instalacja 
 1. pobierz najnowszą wersję ( 3.6.5) python'a,
 2. pobierz to repozytorium ( przez klienta git'a albo jako zip przez stronę internetową ),
