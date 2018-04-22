@@ -1,0 +1,242 @@
+#!/usr/bin/python3
+import sys
+import threading
+import time
+import random
+import argparse
+import subprocess
+import os
+
+from importlib import import_module
+from flask import Flask, render_template, Response
+from flask_socketio import SocketIO, send, emit
+from constants import *
+
+# Raspberry Pi camera module (requires picamera package)
+couldStream = True
+try:
+    from camera_pi import Camera
+except ImportError:
+    print(WARNING_PREFIX + " didn't find module picamera so streaming from raspberry isn't available !")
+    couldStream = False
+
+# Raspberry Pi electronics 
+electronicsEnabled = True
+try:
+    import RPi.GPIO as GPIO
+except ImportError:
+    electronicsEnabled = False
+    print(WARNING_PREFIX + " didn't import raspberry pi electronics module !")
+
+# create flask app
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'l1v3-f0r-l0lz'
+socketio = SocketIO(app)
+
+# constants for breaking other 'daemon' threads
+isServingFiles = True
+verboseMode    = False
+args           = None
+featuresStates = {"flashlight": False, "laser":False, "buzzing":False}
+systemType     = None
+
+
+################################################################################
+#   Bunch of usefull commands
+def whichSystem():
+    name = sys.platform
+
+    # check if is it linux
+    if name == 'linux':
+        # check if using rPi
+        if os.uname()[1] == "raspberrypi":
+            return "raspberry"
+        else:
+            return "linux"
+    # check if is it windows         
+    elif name == 'win32':
+        return "windows"
+    else:
+        return "dunno"
+
+
+################################################################################
+# IMAGE PROCESSING ON SERVER SIDE
+def changeCameraConfig(effect_name):
+    if args.verbose is not None:
+        print(GREEN_ESCAPE + " changing to " + effect_name)
+    Camera.camera.image_effect = effect_name
+
+def processFrame(frame):
+    pass
+
+################################################################################
+# ELECTRONIC LOGIC
+VOLUME_PIN    = 40
+BLUE_LED_PIN  = 38
+RED_LED_PIN   = 37
+GREEN_LED_PIN = 36
+
+def electronicSetup():
+    pass
+
+def blinkLed(pinNumber, time=0.1):
+    pass
+
+def generateSound(frequency, time):
+    pass
+
+def cleanup():
+    pass
+
+################################################################################
+# ROUTING
+@app.route('/')
+def robot_controls():
+    """Video streaming home page."""
+    if not couldStream and verboseMode:
+        print(RED_ESCAPE + u" CAN'T STREAM ! MONKEY ALERT " + ESCAPE_END)
+    return render_template('robot_controls.html',streamState=couldStream)
+    
+
+@app.route('/video_feed')
+def video_feed():
+        if couldStream:
+            """Video streaming route. Put this in the src attribute of an img tag."""
+            return Response(genStream(Camera()),
+                        mimetype='multipart/x-mixed-replace; boundary=frame')
+
+################################################################################    
+# STREAMING
+def genStream(camera):
+    """Video streaming generator function."""
+    while True:
+        frame = camera.get_frame()
+        processFrame(frame)
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
+################################################################################    
+# WEB SOCKET LOGIC AND THREADING
+
+@socketio.on('debug-send')
+def handleMyEvent(e):
+
+    try:
+        print("debug-send received; msg : " + str(e))
+    except TypeError:
+        print("TypeError in received debug-send")
+
+@socketio.on("connected")
+def handleStartingConnection():
+    if verboseMode:
+        print(GOOD_PREFIX + " starting web socket connection !")
+
+@socketio.on("request")
+def handleReturningRequest():
+    try:
+        if verboseMode:
+            print(GOOD_PREFIX + " sending data ...")
+        time.sleep(TIME_STAMP)
+        
+        # returned parameters
+        tempe     = getTemperature()
+        cpuUsage  = getCpuUsage()
+        sensoData = collectSensorData()
+        emit("data", {"temperature":tempe,"CPU":cpuUsage})
+    except:
+        quit()
+
+def getTemperature():
+    return "343"
+
+def getCpuUsage():
+    subprocess.Popen(["top","-nb1",">","tmp.txt"])
+
+def collectSensorData():
+    return 'sensor data'
+
+##############################################
+# functions that resond to user button input #
+#                                            #
+@socketio.on("laser")
+def switchLaser():
+    if verboseMode:
+        featuresStates["laser"] = not featuresStates["laser"]
+        if featuresStates["laser"]:
+            print(GREEN_ESCAPE + u"{*} laser on" + ESCAPE_END) 
+        else:
+            print(RED_ESCAPE + "{*} laser off" + ESCAPE_END)
+
+@socketio.on("flashlight")
+def switchFlashlight():
+    if verboseMode:
+        featuresStates["flashlight"] = not featuresStates["flashlight"]
+        if featuresStates["flashlight"]:
+            print(GREEN_ESCAPE + u"{*} flashlight on" + ESCAPE_END) 
+        else:
+            print(RED_ESCAPE + "{*} flashlight off" + ESCAPE_END)
+
+@socketio.on("buzz")
+def buzz():
+    if verboseMode:
+        featuresStates["buzzing"] = not featuresStates["buzzing"]
+        if featuresStates["buzzing"]:
+            print(GREEN_ESCAPE + u"{*} buzzing on" + ESCAPE_END) 
+        else:
+            print(RED_ESCAPE + "{*} buzzing off" + ESCAPE_END)
+
+################################################################################    
+# CONTROLLER CLASS
+class controller():
+    @staticmethod
+    def configurate():
+        global args, verboseMode, systemName
+        # get user input
+        parser = argparse.ArgumentParser(description="Python program that runs flask server that controls raspi-bot")
+        parser.add_argument("--verbose", help="verbose output")
+        args = parser.parse_args()
+
+        if args.verbose is not None:
+            verboseMode = True
+        
+        systemName = whichSystem()
+        if verboseMode:
+            print(GREEN_ESCAPE + "detected system " + systemName + ESCAPE_END)
+
+        # if streaming is available then config camera
+        if couldStream:
+            Camera.camera.resolution   = DEF_RESOLUTION
+            Camera.camera.image_effect = DEF_EFFECT
+            Camera.camera.framerate    = DEF_FRAMERATE
+
+        # if electronics are enabled then configurate them
+        if electronicsEnabled:
+            electronicSetup()
+            blinkLed(RED_LED_PIN)
+            blinkLed(GREEN_LED_PIN)
+            blinkLed(BLUE_LED_PIN)
+    
+    @staticmethod
+    def start():
+        global isServingFiles
+
+        try :
+            if args.verbose is not None:
+                print(GOOD_PREFIX + u"starting server")            
+            socketio.run(app)
+            # app.run(host='0.0.0.0', threaded=True)
+
+        except (KeyboardInterrupt, SystemExit):
+            isServingFiles = False
+
+            if args.verbose is not None:
+                print(WARNING_PREFIX + "Exiting app")
+            print("Bye !")
+            sys.exit(0)
+
+################################################################################    
+
+if __name__ == '__main__':
+    controller.configurate()
+    controller.start()

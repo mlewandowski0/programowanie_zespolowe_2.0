@@ -1,5 +1,4 @@
-psutil==5.4.0
 Flask==0.12.2
-flask_socketio==2.9.6
+Flask_SocketIO==2.9.4
 greenlet==0.4.13
 picamera==1.13

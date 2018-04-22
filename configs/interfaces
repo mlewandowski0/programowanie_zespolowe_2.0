@@ -9,12 +9,8 @@ source-directory /etc/network/interfaces.d
 auto lo
 iface lo inet loopback
 
+auto eth0
 iface eth0 inet manual
 
 allow-hotplug wlan0
-iface wlan0 inet static 
-	address 10.10.10.1
-	netmask 255.255.255.0
-	network 10.10.10.10
-	broadcast 10.10.10.255
-	
+iface wlan0 inet manual

@@ -1,0 +1,485 @@
+@font-face {
+    font-family: titleFont;
+    src: url("Quantum.otf");
+}
+
+@font-face {
+    font-family: textFont;
+    src: url("Robotica.ttf");
+}
+
+img {
+    width: 1000px;
+    outline: 4px dotted #233237;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+header {
+    width: 100%;
+}
+
+#background {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    outline: 4px red dotted;
+}
+
+#navigation-panel {
+    display: inline-block;
+    width: 80%;
+}
+
+#panel-root {
+    position: absolute;
+    z-index: 0;
+    left: 12px;
+    top: 10px;
+}
+
+#stream-canvas {
+    width: 800px;
+    z-index: 2;
+    outline: 4px dotted line;
+}
+
+.block {
+    display: inline-block;
+    margin: 10px 10px 0 0;
+    padding: 15px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#content {
+    width: 1500px;
+    float: left;
+    margin-left: -16px;
+}
+
+#navigation-panel {
+    width: 25%;
+    float: left;
+}
+
+#stream-content {
+    float: left;
+    left: 50px;
+}
+
+.optionTxt {
+    font-family: textFont;
+    font-size: 32px;
+}
+
+.text {
+    color: #eac67a;
+    text-shadow: 0 0 4px #984b43, 0 0 16px #984b43, 0 0 36px #984b43, 0 0 64px #984b43, 0 0 100px #984b43;
+}
+
+h1 {
+    font-family: titleFont;
+    font-size: 122px;
+    text-align: right;
+}
+
+.robotTab {
+    position: absolute;
+    float: left;
+    top: 64px;
+    left: 1500px;
+}
+
+.ui-button--type-primary.ui-button--color-default {
+    background: #233237;
+    color: #eac67a;
+    height: 96px;
+}
+
+.minimap {
+    position: absolute;
+    outline: 4px #233237 dotted;
+}
+
+#data {
+    position: relative;
+    top: 300px;
+    width: 400px;
+    margin-top: 40px;
+    text-align: center;
+    border-radius: 25px;
+    background: radial-gradient( #233237, #18121E);
+    padding: 20px;
+}
+
+.parameter {
+    font-family: textFont;
+    font-size: 24px;
+}
+
+.navigationBtn {
+    font-weight: bold;
+    font-family: textFont;
+    outline: #233237 4px;
+    margin-bottom: 8px;
+    width: 100%;
+    height: 96px;
+}
+
+.ui-button--type-primary.ui-button--color-default:hover:not(.is-disabled) {
+    background-color: #984b43;
+}
+
+.pushable
+{
+    width: 33%;
+    height: 128px;
+    background-color: #233237;
+    outline: #18121E 2px;
+}
+
+.flashlight_off
+{
+    background: url("../images/flashlight-off.png");
+    background-size: 105%;
+}
+
+.flashlight_on
+{
+    background: url("../images/flashlight-on.png");
+    background-size: 105%;
+}
+
+.laser_off
+{
+    background: url("../images/laser-off.png");
+    background-size: 115%;
+}
+
+.laser_on
+{
+    background: url("../images/laser-on.png");
+    background-size: 115%;
+}
+
+#audio_panel *
+{
+    display: block;
+}
+
+/* Modals */
+
+.modal-mask {
+    position: fixed;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 5);
+    display: table;
+    transition: opacity .3s ease;
+}
+
+.modal-wrapper {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.modal-container {
+    width: 88%;
+    height: 88%;
+    margin: 0px auto;
+    padding: 20px 30px;
+    background: radial-gradient( #233237, #18121E);
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+    transition: all .3s ease;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+.modal-controls {
+    width: 100%;
+    height: 100%;
+}
+
+.modal-body {
+    margin: 20px 0;
+}
+
+.modal-default-button {
+    float: right;
+}
+
+/*
+ * The following styles are auto-applied to elements with
+ * transition="modal" when their visibility is toggled
+ * by Vue.js.
+ *
+ * You can easily play with the modal transition by editing
+ * these styles.
+ */
+
+.modal-enter {
+    opacity: 0;
+}
+
+.modal-leave-active {
+    opacity: 0;
+}
+
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+.modal-header-controls {
+    font-family: titleFont;
+    font-size: 64px;
+    text-align: center;
+}
+
+
+#controls-canvas {
+    width: 87%;
+    height: 95%;
+    z-index: 1;
+    float:left;
+}
+
+#control_panel
+{
+    
+    position: absolute;
+    top: 4%;
+    left: 84.5%;
+    width: 15%;
+    height: 90%;
+    overflow-y: scroll;
+    opacity: 30%;
+    background-color: rgb(35, 50, 55, 0.35);
+    
+}
+
+.header-modal {
+    font-family: titleFont;
+    font-size: 64px;
+    text-align: center;
+}
+
+#audioPanel {
+    width: 90%;
+    height: 50%;
+    outline: red 4px dotted;
+}
+
+#minimap
+{
+    background-color: #984b43;
+}
+
+.ui-collapsible__header
+{
+    color: rgba(234, 198, 122, 0.6 );
+    font-family: textFont;
+    font-size: 24px;
+    background-color: rgb(35, 50, 55, 0.45);
+}
+.ui-collapsible__header-icon
+{
+    color: aqua;
+}
+
+.ui-collapsible__body {
+    border: 0px solid #eac67a;
+}
+
+.ui-collapsible:not(.is-disabled) .ui-collapsible__header:hover, body[modality=keyboard] .ui-collapsible:not(.is-disabled) .ui-collapsible__header:focus
+{
+    background-color: #984b43;
+}
+
+.controls_exitBtn
+{
+    color: rgba(234, 198, 122, 0.6 );
+    font-family: titleFont;
+    width: 100%;
+    font-size: 32px;
+    font-weight: bold;
+    background-color: rgba(35, 50, 55, .40);
+    border: none;
+}
+
+.controls_exitBtn:hover
+{
+    background-color: aqua;
+}
+
+.optionPanel
+{
+    overflow-y: scroll;
+}
+.modal-container
+{
+    overflow-y: scroll;
+}
+
+.ui-select__label-text
+{
+    font-family: textFont;
+    font-size: 20px;
+    color: #eac67a;
+
+}
+
+.ui-select__display-value
+{
+    color: #984b43;
+    background: #eac67a;
+    font-family: textFont;
+    text-shadow: none;
+}
+
+.text_option
+{
+    font-family: textFont;
+    font-size: 16px;
+}
+
+.ui-radio-group__label-text
+{
+    color: #eac67a;
+    font-family: textFont;
+    font-size: 18px;
+}
+.ui-radio--color-primary.is-checked:not(.is-disabled) .ui-radio__outer-circle
+{
+    color: #eac67a;
+}
+.ui-radio__label-text
+{
+    font-family: textFont;
+    font-size: 16px;
+}
+
+.ui-switch__label-text
+{
+    color: #eac67a;
+    font-family: textFont;
+    font-size: 18px;
+}
+
+.ui-switch__thumb
+{
+    background-color: #984b43; 
+}
+.ui-switch--color-primary.is-checked:not(.is-disabled) .ui-switch__thumb
+{
+    background-color: #eac67a;
+}
+
+.ui-select.is-active:not(.is-disabled) .ui-select__icon-wrapper .ui-icon, .ui-select.is-active:not(.is-disabled) .ui-select__label-text:hover{
+    color: aqua;
+}
+
+.ui-radio--color-primary.is-checked:not(.is-disabled) .ui-radio__inner-circle
+{
+    background-color: #eac67a;
+}
+
+.ui-radio--color-primary.is-checked:not(.is-disabled) .ui-radio__outer-circle
+{
+    background-color: #984b43;
+}
+.ui-slider__thumb
+{
+    background-color: #eac67a;
+}
+.ui-slider__track-fill
+{
+    background-color: #984b43;
+}
+
+li
+{
+    text-shadow: none;
+    background-color: none;
+    color: #984b43;
+    font-size: 16px;
+    font-family: textFont;
+}
+.ui-select-option.is-selected
+{
+    color: #eac67a;
+}
+.ui-select__dropdown
+{
+    background-color: #233237;
+}
+
+h2{
+    font-family: titleFont;
+    font-size: 64px;
+    text-align: left;
+}
+
+.textOption
+{
+    font-size: 22px;
+    font-family: textFont;
+
+}
+
+.volume
+{
+    text-align: left;
+    font-size: 32px;
+}
+
+.audio_manager
+{
+    width: 40%;
+}
+.saying_panel
+{
+    width: 40%;
+}
+.asking_panel
+{
+    width: 40%;
+}
+
+.centered_button
+{
+    font-size: 18px;
+    font-family: textFont;
+    color: aqua;
+    outline: #984b43;
+    background: radial-gradient(#233237, #18121E);
+    text-shadow: 0 0 4px #984b43, 0 0 16px #984b43, 0 0 36px #984b43, 0 0 64px #984b43, 0 0 100px #984b43;
+}
+
+.ui-textbox.has-floating-label .ui-textbox__label-text.is-inline
+{
+    font-size: 20px;
+    font-family: textFont;
+    color: #eac67a;
+}
+
+.ui-textbox__input, .ui-textbox__textarea
+{
+    font-size: 18px;
+    font-family: textFont;
+    color: #eac67a;
+    outline: #984b43;
+}

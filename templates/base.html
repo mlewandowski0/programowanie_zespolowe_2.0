@@ -1,0 +1,73 @@
+{% extends 'template.html' %} {% block styles %}
+<link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='dependencies/keen-ui.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dependencies/bootstrap.css') }}">
+<link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='styles/style.css') }}"> {% endblock %} {% block dependencies %}
+<script src='{{ url_for("static", filename="dependencies/vue.js") }}'></script>
+<script src='{{ url_for("static", filename="dependencies/keen-ui.min.js") }}'></script>
+<script src='{{ url_for("static", filename="dependencies/socket.io.js") }}'></script>
+<script src='{{ url_for("static", filename="dependencies/jquery.slim.js") }}'></script>
+<script src='{{ url_for("static", filename="dependencies/popper.js") }}'></script>
+<script src='{{ url_for("static", filename="dependencies/bootstrap.js") }}'></script>
+
+{% endblock %} {% block scripts %}
+<script src="{{ url_for('static', filename='scripts/background.js') }}"></script>
+<script src="{{ url_for('static', filename='scripts/main.js') }}"></script>
+
+<!--
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBu-916DdpKAjTmJNIgngS6HL_kDIKU0aU&callback=myMap"></script>
+-->
+
+{% endblock %} {% block content %}
+<div id='canvas-wrap'>
+  <canvas id='background'>
+    Your Current Browser doesn't support canvas element !
+  </canvas>
+
+  <!-- modal templates -->
+  {% block controlsModal %}{% endblock %}
+  {% block visualsModal  %}{% endblock %}
+  {% block audioModal    %}{% endblock %}
+  {% block optionsModal  %}{% endblock %}
+  
+  <div id='panel-root' class='container text'>
+    <h1>
+      [$ title $]
+    </h1>
+    <div id='content'>
+      <div id='navigation-panel' class='block'>
+
+        <ui-button id="controls" class="navigationBtn text" raised @click="showControls=true">
+          <span class='optionTxt'> Controls </span>
+        </ui-button>
+        <controls-modal v-if="showControls" @close="showControls=false"></controls-modal>
+
+        <ui-button id="Visuals" class="navigationBtn text" raised @click="showVisuals=true">
+          <span class="optionTxt">Visuals</span>
+        </ui-button>
+        <visuals-modal v-if="showVisuals" @close="showVisuals=false"></visuals-modal>
+
+        <ui-button id="Audio" class="navigationBtn text" raised @click="showAudio=true">
+          <span class="optionTxt">Audio Panel</span>
+        </ui-button>
+        <audio-modal v-if="showAudio" @close="showAudio=false"></audio-modal>
+
+        <ui-button id="Options" class="navigationBtn text" raised @click="showOptions=true">
+          <span class="optionTxt">Options</span>
+        </ui-button>
+        <options-modal v-if="showOptions" @close="showOptions=false"></options-modal>
+
+      </div>
+      <div id='stream-content'>
+        {% if streamState %}
+          <img id='imgStream' src="{{ url_for('video_feed') }}">
+         {% else %}
+          <img id="view" src="{{ url_for('static', filename='images/matrix.gif') }} "> 
+        {% endif %}
+      </div>
+    </div>
+    <div class="robotTab">
+      {% block robotTab %}{% endblock %}
+    </div>
+  </div>
+</div>
+{% endblock %}

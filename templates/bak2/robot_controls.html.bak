@@ -1,0 +1,103 @@
+{% extends 'base.html' %} 
+
+{% block modalTemplates %}
+<!-- template for image processing panel -->
+<script type="text/x-template" id="imgProcessingPanel">
+  <transition name="modal">
+    <div class="modal-mask">
+      <div class="modal-wrapper">
+          <div class="modal-container">
+            <div class="modal-header">
+              <slot name="header">
+                xdd
+              </slot>
+            </div>
+            
+            <div class="modal-body">
+                <slot name="body">
+                  body
+                </slot>
+            </div>
+            
+            <div class="modal-footer">
+              <slot name="footer">
+                xd
+                <button class="modal-default-button" @click="$emit('close')">
+                  OK
+                </button>
+              </slot>
+            </div>
+          </div>
+      </div>
+    </div>
+  </transition>
+</script>
+{% endblock %}
+
+{% block Visuals %}
+<div class='collapsStyle'>
+  <ui-button id="showImgProcessing" raised @click="showProcessing = true" v-on:click="openProcessingPanel">  
+    <span class='optionTxt'> Processing Panel </span>
+  </ui-button>
+
+  <modal v-if="showProcessing" @close="showProcessing=false">
+  </modal>
+  
+  <!--
+  <ui-button  raised>
+    <span class='optionTxt'> img proc 1 </span>
+  </ui-button>
+  <ui-button  raised>
+    <span class='optionTxt'> img proc 2 </span>
+  </ui-button>
+  <ui-button  raised>
+    <span class='optionTxt'> img proc 3 </span>
+  </ui-button>
+  <ui-button  raised>
+    <span class='optionTxt'> img proc 4 </span>
+  </ui-button  raised>
+-->
+
+  <ui-slider show-marker snap-to-steps :step='10'></ui-slider>
+</div>
+{% endblock %} 
+
+{% block Audio %}
+<div class='collapsStyle'>
+  <ui-button v-on:click="openAudioPanel"><span class='optionTxt'> Audio Panel</span></ui-button>
+</div>
+{% endblock %}
+
+{% block Features %}
+<div class='collapsStyle'>
+  <ui-button  raised v-on:click="switchLaser">
+    <span class='optionTxt'>Turn on laser </span>
+  </ui-button>
+  <div class="divider"></div>
+  <ui-button  raised v-on:click="switchFlashlight">
+    <span class='optionTxt'>Turn on flashlight</span>
+  </ui-button>
+  <div class="divider"></div>
+  <ui-button  raised v-on:click="buzz">
+    <span class='optionTxt'>Generate simple sound </span>
+  </ui-button>
+  <div class="divider"></div>
+</div>
+{% endblock %} 
+
+{% block Options %}
+<div class='collapsStyle'>
+  <ui-button  raised>
+    <span class='optionTxt' v-on:click="openDiagnosticsPanel"> Run diagnostics </span>
+  </ui-button>
+</div>
+{% endblock %}
+
+{% block robotTab %}
+<canvas class="minimap" width="300px" height="300px"></canvas>
+<div id="data">
+  <div id="cpuUsage">cpu</div>
+  <div id="temperature">temp</div>
+  <div id="options">options</div>
+</div>
+{% endblock %}
