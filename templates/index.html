@@ -1,0 +1,231 @@
+<html>
+	<head>
+		<title>RaspiBot</title>
+		<link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='dependencies/keen-ui.min.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dependencies/bootstrap.css') }}">
+		<link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='styles/style.css') }}">
+		<script src='{{ url_for("static", filename="dependencies/vue.js") }}'></script>
+		<script src='{{ url_for("static", filename="dependencies/keen-ui.min.js") }}'></script>
+		<script src='{{ url_for("static", filename="dependencies/socket.io.js") }}'></script>
+		<script src='{{ url_for("static", filename="dependencies/jquery.slim.js") }}'></script>
+		<script src='{{ url_for("static", filename="dependencies/popper.js") }}'></script>
+		<script src='{{ url_for("static", filename="dependencies/bootstrap.js") }}'></script>
+	</head>
+	<body>
+		<div id='canvas-wrap'>
+			<canvas id='background'>
+				Your Current Browser doesn't support canvas element !
+			</canvas>
+			
+			<!-- modal templates -->
+			<!-- template for controls panel -->
+			<script type="text/x-template" id="controlsModal">
+				<transition name="modal">
+					<div class="modal-mask ">
+						<div class="modal-wrapper">
+							<div class="modal-container modal-controls">
+								<div class="modal-body-controls">
+									{% if streamState %}
+									<canvas id="controls-canvas" style="background-image: url( {{ url_for('video_feed') }} ); background-size: 100%; }}">
+										Your current browser does not support html canvas element !
+									</canvas>
+									{% else %}
+									<canvas id="controls-canvas" style="background-image: url( {{ url_for('static', filename='images/matrix.gif') }} ); background-size: 100%;">
+										Your current browser does not support html canvas element !
+									</canvas>
+									{% endif %}
+									<div id="control_panel">
+										<ui-collapsible title="steering">
+											<ui-select label="Steering Servo options" :options="servo_options" v-model="servo_selected_option"></ui-select>
+											
+											<ui-select label="motor options" :options="motor_options" v-model="motor_selected_option"></ui-select>
+											<br>
+											<div class="text_option">Yaw axis</div>
+											<ui-slider v-model="yaw_value"></ui-slider>
+											<br>
+											<div class="text_option">Pitch axis</div>
+											<ui-slider v-model="pitch_value"></ui-slider>
+										</ui-collapsible>
+										
+										<ui-collapsible title="processing">
+											<ui-radio-group name="img_processing" :options="image_effects" v-model="image_effect" vertical>Image Processing </ui-radio-group>
+											<br>
+											<div class="text_option">flashlight brightness</div>
+											<ui-slider v-model="f_brightness"></ui-slider>
+											<br>
+											<div class="text_option"> laser power</div>
+											<ui-slider v-model="l_brightness"></ui-slider>
+											<br>
+										</ui-collapsible>
+										
+										<ui-collapsible title="options">
+											<ui-switch v-model="f_switch" switch-position="right">flashlight</ui-switch>
+											<br>
+											<ui-switch v-model="l_switch" switch-position="right">laser</ui-switch>
+										</ui-collapsible>
+										
+										<div class="modal-footer-controls">
+											<button class="text controls_exitBtn" @click="$emit('close')">
+												return
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				<!--
+				</div>
+				-->
+				</transition>
+			</script>
+			<!-- template for theming panel -->
+			<script type="text/x-template" id="visualsModal">
+				<transition name="modal">
+					<div class="modal-mask">
+						<div class="modal-wrapper">
+							<div class="modal-container">
+								<h2>
+									Visuals
+								</h2>
+								<div class="visual_panel">
+									<ui-radio-group class='extra-size' vertical placeholder="Choose theme" v-model="theme" :options="theme_options">
+									</ui-radio-group>
+									<button class="text controls_exitBtn" @click="$emit('close')">
+										return
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</transition>
+			</script>
+			<!-- template for audio panel -->
+			<script type="text/x-template" id="audioModal">
+				<transition name="modal">
+					<div class="modal-mask">
+						<div class="modal-wrapper">
+							<div class="modal-container">
+								
+								<h2 class="text header-modal">
+									Audio Panel
+								</h2>
+								<div id="audio_panel">
+									<!-- <canvas id="audioPanel" disabled></canvas> -->
+									
+									<div class="audio_manager">
+										<div class="textOption volume">audio volume</div>
+										<ui-slider show-marker v-model="audio_volume">
+										</ui-slider>
+									</div>
+									<br>
+									<div class="saying_panel">
+										<div class="textOption" style="text-align:left;"> Let raspibot say something : </div>
+										<ui-textbox floating-label label="what to say ?" v-model="whatToSay">
+										</ui-textbox>
+										<button class="centered_button">say</button>
+									</div>
+									<br>
+									<div class="asking_panel align_left">
+										<div class="textOption"style="text-align:left;"> ask Raspi a question : </div>
+										<ui-textbox floating-label label="Ask me question!" v-model="question">
+										</ui-textbox>
+										<button class="centered_button">ask</button>
+										
+									</div>
+									<button class="controls_exitBtn" @click="$emit('close')">
+										Return
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</transition>
+			</script>
+			<!-- template for options panel -->
+			<script type="text/x-template" id="optionsModal">
+				<transition name="modal">
+					<div class="modal-mask">
+						<div class="modal-wrapper">
+							<div class="modal-container">
+								<div class='optionPanel'>
+									<h2> Sensor options </h2>
+									<ui-checkbox class="checkbox" box-position="right" v-model="allowLaser">allow laser</ui-checkbox>
+									<ui-checkbox class="checkbox" box-position="right" v-model="allowFlashlight">allow flashlight</ui-checkbox>
+									<ui-checkbox class="checkbox" box-position="right" v-model="allowCOsensor">allow CO sensor</ui-checkbox>
+									<ui-checkbox class="checkbox" box-position="right" v-model="allowGoogleMaps">allow google map</ui-checkbox>
+									<ui-checkbox class="checkbox" box-position="right" v-model="allowTemperature">allow temperature sensor</ui-checkbox>
+									<ui-checkbox class="checkbox" box-position="right" v-model="allowHumilidity">allow humilidity sensor</ui-checkbox>
+									<ui-checkbox class="checkbox" box-position="right" v-model="allowCPUTemp">allow CPU temperature</ui-checkbox>
+									<ui-checkbox class="checkbox" box-position="right" v-model="allowCpuPercent">allow CPU percent usage</ui-checkbox>
+									<button class="modal-sdefault-button" @click="$emit('close')">
+										OK
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</transition>
+			</script>
+			
+			<div id='panel-root' class='container text'>
+				<h1>
+					[$ title $]
+				</h1>
+				<div id='content'>
+					<div id='navigation-panel' class='block'>
+						
+						<ui-button id="controls" class="navigationBtn text" raised @click="showControls=true">
+							<span class='optionTxt'> Controls </span>
+						</ui-button>
+						<controls-modal v-if="showControls" @close="showControls=false"></controls-modal>
+						
+						<ui-button id="Visuals" class="navigationBtn text" raised @click="showVisuals=true">
+							<span class="optionTxt">Visuals</span>
+						</ui-button>
+						<visuals-modal v-if="showVisuals" @close="showVisuals=false"></visuals-modal>
+						
+						<ui-button id="Audio" class="navigationBtn text" raised @click="showAudio=true">
+							<span class="optionTxt">Audio Panel</span>
+						</ui-button>
+						<audio-modal v-if="showAudio" @close="showAudio=false"></audio-modal>
+						
+						<ui-button id="Options" class="navigationBtn text" raised @click="showOptions=true">
+							<span class="optionTxt">Options</span>
+						</ui-button>
+						<options-modal v-if="showOptions" @close="showOptions=false"></options-modal>
+						
+					</div>
+					<div id='stream-content'>
+						{% if streamState %}
+						<img id='imgStream' src="{{ url_for('video_feed') }}">
+						{% else %}
+						<img id="view" src="{{ url_for('static', filename='images/matrix.gif') }} "> 
+						{% endif %}
+					</div>
+				</div>
+				<div class="robotTab">
+					<div id="minimap" class="minimap" width="300px" height="300px"></div>
+					<div id="data">
+						<div id="cpuUsage" class="text parameter"> [$ cpuUsage $]</div>
+						<br>
+						<div id="temperature" class="text parameter">[$ temperature $]</div>
+						<br>
+						<div id="options" class="text parameter">[$ moveDetected $]</div>
+						<br>
+						<button id="switch-flashlight" class="pushable" raised @click="switchFlashlight()" v-bind:class="[ flashlightOn ? flashlight_on : flashlight_off ]"></button>
+						<button id="switch-laser" class="pushable" raised @click="switchLaser()" v-bind:class="[ laserOn ? laser_on : laser_off ]"></button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<script src="{{ url_for('static', filename='scripts/background.js') }}"></script>
+		<script src="{{ url_for('static', filename='scripts/main.js') }}"></script>
+		
+		<!--
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBu-916DdpKAjTmJNIgngS6HL_kDIKU0aU&callback=myMap"></script>
+		-->
+		
+	</body>
+</html>
